@@ -64,15 +64,14 @@ You should have the following input files:
 ```bash
 ls -lh data
 ```
+>total 1.2G<br>
+>-rw-r--r-- 1 myuser cs 347M Jan 28 18:41 fha.bbgeno.gz<br>
+>-rw-r--r-- 1 myuser cs 6.5K Jan 28 18:40 fha.bbgeno.ids.txt<br>
+>-rw-r--r-- 1 myuser cs 9.9K Jan 28 18:40 fha.pheno<br>
+>-rw-r--r-- 1 myuser cs 1.3K Jan 28 18:40 fha.pheno2<br>
+>-rw-r--r-- 1 myuser cs 876M Jan 28 18:41 fha.vcf.gz<br>
 
->total 2.5G<br>
->-rw-r--r-- 1 myuser cs  22K Jan 26 12:31 lg_ord_sca_length.dsv<br>
->-rw-r--r-- 1 myuser cs 768M Jan 26 12:31 timemaHVA.gl<br>
->-rw-r--r-- 1 myuser cs 467M Jan 26 12:31 timemaHVA.vcf.gz<br>
->-rw-r--r-- 1 myuser cs 781M Jan 26 12:31 timemaHVC.gl<br>
->-rw-r--r-- 1 myuser cs 476M Jan 26 12:31 timemaHVC.vcf.gz<br>
-
-There is a vcf file containing single nucleotide polymorphisms (SNPs) from RAD data of 605 individuals from a single polymorphic population of *Timema cristinae* (population code FHA). vcf is a very popular format for genetic variants, you can find more info [here](http://www.internationalgenome.org/wiki/Analysis/vcf4.0/). You can have a look at the file content with the following commands:
+There is a vcf file containing single nucleotide polymorphisms (SNPs) from RAD data of 602 individuals from a single polymorphic population of *Timema cristinae* (population code FHA). vcf is a very popular format for genetic variants, you can find more info [here](http://www.internationalgenome.org/wiki/Analysis/vcf4.0/). You can have a look at the file content with the following commands:
 ```bash
 gzip -dc fha.vcf.gz | less -S
 # or with bcftools
@@ -80,4 +79,51 @@ bcftools view fha.vcf.gz | less -S
 # excluding long header
 bcftools view -H fha.vcf.gz | less -S
 ```
-This file has to be converted to...
+There are two files containing the phenotypes of the same inviduals in the same order than in the vcf file (NA when the phenotype is missing). This phenotypes encode the dorsal white stripe either as a continuous trait (standardised white area; ```fha.pheno```) or as a discerte binary trait (presence/absence; ```fha.pheno2```). You can have a look at the files content:
+```bash
+head data/fha.pheno
+```
+>0.866078916198945<br>
+>-1.17516992488642<br>
+>NA<br>
+>NA<br>
+>NA<br>
+>-3.11627693813939<br>
+>-0.348977465694598<br>
+>-0.663007099264362<br>
+>NA<br>
+>NA<br>
+
+```bash
+head data/fha.pheno2
+```
+>1<br>
+>1<br>
+>NA<br>
+>NA<br>
+>NA<br>
+>0<br>
+>1<br>
+>1<br>
+>NA<br>
+>NA<br>
+
+```gemma```, the program we will be using to carry out multi-variant GWA, needs two input files: one with the genotypes and another one with the phenotypes. Most GWA programs rely on called genotypes, but ```gemma``` can work with genotype probabilities, which allows incorporating genotype uncertainty in the analyses. ```gemma``` accepts a number of formats for genotypes, we are going to use the mean genotype format (based on the BIMBAM format), where genotypes are encoded as posterior mean genotype probabilities. A posterior mean genotype is a value between 0 to 2 that can be interpreted as the minor allele dosage: 0 is homozygous for the major allele, 1 is a heterozygote, and 2 is a homozygote for the minor allele.
+We are going to use the custom Perl script ```bcf2bbgeno.pl``` to calculate empirical mean genotype posterior probabilities from the genotype likelihoods in the VCF. We will use inferred allele frequencies to set Hardy-Weinberg Equilibrium priors (i.e. *p*(AA) = *p*<sup>2</sup>; *p*(aa) = (1-*p*)<sup>2</sup>; *p*(Aa) = 2*p*(1-*p*); being *p* the allele frequency of major/reference allele A).
+
+You can some info about how to run the Perl script:
+```bash
+# show help
+scripts/bcf2bbgeno.pl -h
+```
+
+Now let's calculate the mean genotypes. This may take a while.
+```bash
+# Execute script
+scripts/bcf2bbgeno.pl -i data/fha.vcf.gz -o fha.bbgeno -p H-W -s -r
+```
+And then compress the output file to save some space
+```bash
+# then compress the file to save some space
+$ gzip fha.bbgeno
+```

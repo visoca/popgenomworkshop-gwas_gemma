@@ -190,36 +190,37 @@ gemma -h 3
 ```gemma``` uses a relatedness matrix to account for any population structure in the data that may affect results. The easiest way to obtain such matrix is using ```gemma``` itself. We are going to use the submission script ```gemma_relmatrix.sh```. Let's have a look with the nano text editor:
 ```bash
 nano scripts/gemma_relmatrix.sh
+```bash
+#!/bin/bash
+#$ -l h_rt=1:00:00
+#$ -j y
+#$ -o gemma_relmatrix.log
+
+GEMMA='gemma'
+DIR="/data/$USER/gwas_gemma"
+GENOTYPES='data/fha.bbgeno.gz'
+PHENOTYPES='data/fha.pheno'
+# centered matrix preferred in general, accounts better for population structure
+# standardized matrix preferred if SNPs with lower MAF have larger effects 
+MATRIXTYPE=1 # 1=centered matrix, 2=standardized matrix
+OUTBASE='relmatrix'
+
+hostname
+uname -a
+date
+echo "----------------------------------------------------------"
+echo
+cd $DIR
+
+$GEMMA \
+-g $GENOTYPES \
+-p $PHENOTYPES \
+-gk $MATRIXTYPE \
+-o $OUTBASE
+echo
+echo "----------------------------------------------------------"
+date
 ```
->#!/bin/bash<br> 
->#$ -l h_rt=1:00:00<br> 
->#$ -j y<br> 
->#$ -o gemma_relmatrix.log<br> 
-><br> 
->GEMMA='gemma'<br> 
->DIR="/data/$USER/gwas_gemma"<br> 
->GENOTYPES='fha.bbgeno.gz'<br> 
->PHENOTYPES='data/fha.pheno'<br> 
-># centered matrix preferred in general, accounts better for population structure<br> 
-># standardized matrix preferred if SNPs with lower MAF have larger effects <br> 
->MATRIXTYPE=1 # 1=centered matrix, 2=standardized matrix<br> 
->OUTBASE='relmatrix'<br> 
-><br> 
->hostname<br> 
->uname -a<br> 
->date<br> 
->echo "----------------------------------------------------------"<br> 
->echo<br> 
->cd $DIR<br> 
-><br> 
->$GEMMA \<br> 
->-g $GENOTYPES \<br> 
->-p $PHENOTYPES \<br> 
->-gk $MATRIXTYPE \<br> 
->-o $OUTBASE<br> 
->echo<br> 
->echo "----------------------------------------------------------"<br> 
->date<br> 
 
 And then let's submit the job (it should take just a few minutes):
 ```bash

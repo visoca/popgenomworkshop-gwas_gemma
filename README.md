@@ -109,15 +109,20 @@ head data/fha.pheno2
 >NA<br>
 
 ```gemma```, the program we will be using to carry out multi-variant GWA, needs two input files: one with the genotypes and another one with the phenotypes. Most GWA programs rely on called genotypes, but ```gemma``` can work with genotype probabilities, which allows incorporating genotype uncertainty in the analyses. ```gemma``` accepts a number of formats for genotypes, we are going to use the mean genotype format (based on the BIMBAM format), where genotypes are encoded as mean genotypes. A mean genotype is a value between 0 and 2 that can be interpreted as the minor allele dosage: 0 is homozygous for the major allele, 1 is a heterozygote, and 2 is a homozygote for the minor allele. Thus, intermediate values reflect the uncertainty in genotypes. 
-We are going to use the custom Perl script ```bcf2bbgeno.pl``` to get such mean genotypes. First, the script removes all the SNPs that have more than two alleles. This is common practice, because most of the models used for inference are based in biallelic variants. Then, the script calculates empirical posterior genotype probabilities from the genotype likelihoods in the vcf file under the assumption that the population is in Hardy-Weinberg equilibrium (HWE). Specifically, the script uses inferred allele frequencies to set HWE priors:. *p*(AA) = *p*<sup>2</sup>; *p*(aa) = (1-*p*)<sup>2</sup>; *p*(Aa) = 2*p*(1-*p*, being *p* the allele frequency of major/reference allele A. Genotype likelihoods are multiplied by these priors to obtain genotype posterior probabilities that are then encoded as mean genotypes and saved to a .bbgeno file.
 
-You can some info about how to run the Perl script:
+We are going to use the custom Perl script ```bcf2bbgeno.pl``` to get such mean genotypes. First, the script removes all the SNPs that have more than two alleles. This is common practice, because most of the models used for inference are based in biallelic variants. Then, the script calculates empirical posterior genotype probabilities from the genotype likelihoods in the vcf file under the assumption that the population is in Hardy-Weinberg equilibrium (HWE). Specifically, the script uses inferred allele frequencies to set HWE priors:
+
+*p*(AA) = *p*<sup>2</sup>; *p*(aa) = (1-*p*)<sup>2</sup>; *p*(Aa) = 2*p*(1-*p*)
+
+being *p* the allele frequency of major/reference allele A. Genotype likelihoods are multiplied by these priors to obtain genotype posterior probabilities that are then encoded as mean genotypes and saved to a .bbgeno file.
+
+You can get some info about how to run the Perl script:
 ```bash
 # show help
 scripts/bcf2bbgeno.pl -h
 ```
 
-Now let's calculate the genotype posterior probabilites and save them in mean genotype format. This process may take quite a while (over 15 minutes), so you may want to either put it a bash script and submit a batch job to the cluster or skip this step altogether (see below).
+Now let's calculate the genotype posterior probabilites and save them in mean genotype format. This process may take quite a while (over 15 minutes), so you may want to either put it a bash script and submit a batch job to the cluster (see ```bcf2bbgeno.sh```) or skip this step altogether (see below).
 
 ```bash
 # Execute script

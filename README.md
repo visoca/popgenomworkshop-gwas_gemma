@@ -163,7 +163,7 @@ less -S fha.ids.txt
 >2013FHA006<br>
 >2013FHA007<br>
 
-## 2. Running ```gemma``` to fit a Bayesian sparse linear mixed model (BSLMM)
+## 3. Running ```gemma``` to fit a Bayesian sparse linear mixed model (BSLMM)
 
 ```gemma```, standing for Genome-wide Efficient Mixed Model Association, is a complex piece of software with many options. It is highly recommended that you read carefully the [manual](http://www.xzlab.org/software/GEMMAmanual.pdf). Let's have a look at the options, with emphasis on the specific ones we will be using.
 ```bash
@@ -262,4 +262,4 @@ less -S output/relmatrix.cXX.txt
 
 
 
-## 2. Analysing ```gemma``` BSLMM output
+## 4. Analysing ```gemma``` BSLMM output

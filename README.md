@@ -406,7 +406,7 @@ The new files generated are:
 * bslmm.bv.txt -> posterior samples of breeding values (~estimated random
 effects)
 * bslmm.gamma.txt -> posterior samples of gamma (i.e. sparse effects) listing the SNPs included in the model in each iteration, that is the loci with detectable (large) effects
-* bslmm.hyp.txt -> posterior samples of hyperparameters, including the proportion of the variance explained (pve), the proportion of the variance explained by the sparse effect loci (pge), the proportion of SNPs with non-zero effects (pi) and the estimated number of loci with large effects (n_gamma)
+* bslmm.hyp.txt -> posterior samples of hyperparameters, including the proportion of the variance explained (pve), the proportion of the genetic variance (i.e. pve) explained by the sparse effect loci (pge), the proportion of SNPs with non-zero effects (pi) and the estimated number of loci with large effects (n_gamma)
 * bslmm.log.txt -> log file
 * bslmm.param.txt -> posterior samples of parameters: random effects (alpha), fixed effects (beta), and sparse effects (gamma)
 
@@ -524,11 +524,12 @@ write.table(hyp.params.table, file="hyperparameters.dsv", sep="\t", quote=F)
 ```
 Values should be similar to this:
 
->  hyperparam              mean       median           2.5%         97.5%<br>
->1        PVE     0.50758534164   0.49616535   0.3290844075   0.753359795<br>
->2        PGE     0.70427977221   0.70412075   0.4118065175  0.9789640325<br>
->3         pi 1.29564889986e-05 9.376132e-06 3.25441665e-06 4.3316011e-05<br>
->4    n.gamma             4.574            4              1            14<br>
+|hyperparam  |            mean |      median  |         2.5% |        97.5%|
+|---|---|---|---|---|
+|        PVE |    0.50758534164 |  0.49616535 |  0.3290844075 |  0.753359795|
+|        PGE |    0.70427977221 |  0.70412075 |  0.4118065175 | 0.9789640325|
+|         pi| 1.29564889986e-05 |9.376132e-06 |3.25441665e-06 |4.3316011e-05|
+|    n.gamma|             4.574 |           4 |             1 |           14|
 
 Now let's plot the MCMC traces and the posterior distributions of the hyperparameters and save them into a pdf file.
 ```R

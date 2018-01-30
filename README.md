@@ -126,7 +126,7 @@ head data/fha.pheno2
 >NA<br>
 >NA<br>
 
-```gemma```, the program we will be using to carry out multi-variant GWA, needs two input files: one with the genotypes and another one with the phenotypes. Most GWA programs rely on called genotypes, but ```gemma``` can work with genotype probabilities, which allows incorporating genotype uncertainty in the analyses. ```gemma``` accepts a number of formats for genotypes, we are going to use the mean genotype format (based on the BIMBAM format), where genotypes are encoded as mean genotypes. A mean genotype is a value between 0 and 2 that can be interpreted as the minor allele dosage: 0 is homozygous for the major allele, 1 is a heterozygote, and 2 is a homozygote for the minor allele. Thus, intermediate values reflect the uncertainty in genotypes. 
+```GEMMA```, the program we will be using to carry out multi-variant GWA, needs two input files: one with the genotypes and another one with the phenotypes. Most GWA programs rely on called genotypes, but ```gemma``` can work with genotype probabilities, which allows incorporating genotype uncertainty in the analyses. ```gemma``` accepts a number of formats for genotypes, we are going to use the mean genotype format (based on the BIMBAM format), where genotypes are encoded as mean genotypes. A mean genotype is a value between 0 and 2 that can be interpreted as the minor allele dosage: 0 is homozygous for the major allele, 1 is a heterozygote, and 2 is a homozygote for the minor allele. Thus, intermediate values reflect the uncertainty in genotypes. 
 
 We are going to use the custom Perl script ```bcf2bbgeno.pl``` to get such mean genotypes. First, the script removes all the SNPs that have more than two alleles. This is common practice, because most of the models used for inference are based in biallelic variants. Then, the script calculates empirical posterior genotype probabilities from the genotype likelihoods in the vcf file under the assumption that the population is in Hardy-Weinberg equilibrium (HWE). Specifically, the script uses inferred allele frequencies to set HWE priors:
 
@@ -199,9 +199,10 @@ and it would also be interesting do some filtering such as excluding rare varian
 gemma -h 3
 ```
 
-```gemma``` uses a relatedness matrix to account for any population structure in the data that may affect results. The easiest way to obtain such matrix is using ```gemma``` itself. We are going to use the submission script ```gemma_relmatrix.sh```. Let's have a look with the nano text editor:
+```GEMMA``` uses a relatedness matrix to account for any population structure in the data that may affect results. The easiest way to obtain such matrix is using ```GEMMA``` itself. We are going to use the submission script ```gemma_relmatrix.sh```. Let's have a look with the nano text editor:
 ```bash
 nano scripts/gemma_relmatrix.sh
+```
 ```bash
 #!/bin/bash
 #$ -l h_rt=1:00:00
@@ -243,34 +244,34 @@ You can check the status of your jobs with ```Qstat```. When finished, it should
 cat output/relmatrix.log.txt
 ```
 >##<br>
->## GEMMA Version = 0.94<br>
+>##GEMMA Version = 0.94<br>
 >##<br>
->## Command Line Input = -g data/fha.bbgeno.gz -p data/fha.pheno -gk 1 -o relmatrix <br>
+>##Command Line Input = -g data/fha.bbgeno.gz -p data/fha.pheno -gk 1 -o relmatrix <br>
 >##<br>
->## Summary Statistics:<br>
->## number of total individuals = 602<br>
->## number of analyzed individuals = 546<br>
->## number of covariates = 1<br>
->## number of phenotypes = 1<br>
->## number of total SNPs = 518232<br>
->## number of analyzed SNPs = 346660<br>
+>##Summary Statistics:<br>
+>##number of total individuals = 602<br>
+>##number of analyzed individuals = 546<br>
+>##number of covariates = 1<br>
+>##number of phenotypes = 1<br>
+>##number of total SNPs = 518232<br>
+>##number of analyzed SNPs = 346660<br>
 >##<br>
->## Computation Time:<br>
->## total computation time = 3.91983 min <br>
->## computation time break down: <br>
->##      time on calculating relatedness matrix = 2.46767 min <br>
+>##Computation Time:<br>
+>##total computation time = 3.91983 min <br>
+>##computation time break down: <br>
+>##time on calculating relatedness matrix = 2.46767 min <br>
 >##<br>
-><br>
+
 
 ```bash
 less -S output/relmatrix.cXX.txt
 ```
->0.08650617109   0.000333571409  0.001472054408  0.001656484245  0.001901346128  0.001199397691  0.001921586938  0.00<br>
->0.000333571409  0.08827073595   0.0008395834056 -0.0008735407094        0.0004308437331 0.004303127573  0.0014308843<br>
->0.001472054408  0.0008395834056 0.09971276805   0.003820448145  0.001814713502  -0.0001891657497        0.0022152800<br>
->0.001656484245  -0.0008735407094        0.003820448145  0.10577918      0.002068707695  -7.400802932e-05        0.00<br>
->0.001901346128  0.0004308437331 0.001814713502  0.002068707695  0.05202678922   -8.732093775e-05        0.0021426359<br>
->0.001199397691  0.004303127573  -0.0001891657497        -7.400802932e-05        -8.732093775e-05        0.1186797893<br>
+>0.08650617109   0.000333571409  0.001472054408  0.001656484245  0.001901346128  0.001199397691  0.0019<br>
+>0.000333571409  0.08827073595   0.0008395834056 -0.0008735407094        0.0004308437331 0.004303127573<br>
+>0.001472054408  0.0008395834056 0.09971276805   0.003820448145  0.001814713502  -0.0001891657497      <br>
+>0.001656484245  -0.0008735407094        0.003820448145  0.10577918      0.002068707695  -7.400802932e-<br>
+>0.001901346128  0.0004308437331 0.001814713502  0.002068707695  0.05202678922   -8.732093775e-05      <br>
+>0.001199397691  0.004303127573  -0.0001891657497        -7.400802932e-05        -8.732093775e-05      <br>
 
 Now we are going to run ```GEMMA``` to fit a BSLMM model. Since this will take quite some time (~15 minutes), we are going to submit it as batch job to the cluster queue. We will be using the script ```gemma_bslmm.sh```. We will run ```GEMMA``` using the relatedness matrix we estimated before, using the BSLMM model with the continuous phenotypes and excluding variants with a minor allele frequency of lest than 1%. We will run a MCMC chain for 1,000,000 steps, after an initial burn-in of 250,000, saving every 100th step, so that we will end up with 10,000 samples to approximate the posterior distribution of the parameters. Let's have a look with nano:
 ```bash

@@ -592,13 +592,15 @@ library(data.table)
 params<-fread("bslmm.param.txt",header=T,sep="\t", data.table=F)
 # ==============================================================================
 ```
-
+Now we will get the SNPs that have a sparse effect (i.e. detectable large effect) on the phenotype. For each SNP, we multiply the small effect of the variant (\beta; all SNPs have small effects) by the additional large effect (\gamma; only some SNPs have large effects) to get the sparse effect size.
 ```R
 # Get variants with sparse effect size on phenotypes 
 # ==============================================================================
 # add sparse effect size (= beta * gamma) to data frame
 params["eff"]<-abs(params$beta*params$gamma)
-
+```
+And then we get the SNPs that have a detectable effect size, and save the top SNPs using several thresholds (1%, 0.1%, 0.01%):
+```R
 # get variants with effect size > 0
 params.effects<-params[params$eff>0,]
 # show number of variants with measurable effect
@@ -622,6 +624,8 @@ top001<-params.effects.sort[params.effects.sort$eff>quantile(params.effects.sort
 write.table(top1, file="top1eff.dsv", quote=F, row.names=F, sep="\t")
 write.table(top01, file="top0.1eff.dsv", quote=F, row.names=F, sep="\t")
 write.table(top001, file="top0.01eff.dsv", quote=F, row.names=F, sep="\t")
+```
+```R
 # ==============================================================================
 # Get variants with high Posterior Inclusion Probability (PIP) == gamma
 # ==============================================================================

@@ -42,12 +42,12 @@ cat /usr/local/extras/Genomics/workshops/January2018/.nanorc >> /home/$USER/.nan
 
 #### Note on transferring output files to your local computer for visualization
 ***
-You probably will want to transfer files to your own computer for visualization (especially the images). In Linux and Mac, you can do that using rsync on the terminal. For example, to transfer one of the png files or all the results that are generated in this practical, the command would be: 
+You probably will want to transfer files to your own computer for visualization (especially the images). In Linux and Mac, you can do that using rsync on the terminal. For example, to transfer one of the pdf files or all the results that are generated in this practical, the command would be: 
 ```bash
-# transfer png file
-rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/fst_hmm/timemaHVAxHVC.fst.png ./
+# transfer pdf file
+rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output/hyperparameters.pdf ./
 # transfer all results
-rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/fst_hmm/*.* ./
+rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output ./
 ```
 Graphical alternatives are [WinSCP](http://dsavas.staff.shef.ac.uk/software/xconnect/winscp.html) or [Cyberduck](http://www.macupdate.com/app/mac/8392/cyberduck). You can find more detailed information [here](https://www.sheffield.ac.uk/wrgrid/using/access).
 ***
@@ -484,7 +484,7 @@ First, we are going to play with the hyperparameter estimates, which will inform
 First we change the working directory:
 ```R
 user<-Sys.getenv("USER")
-wkpath<-paste("/data/",user, "/fst_hmm",sep="")
+wkpath<-paste("/data/",user, "/gwas_gemma/output",sep="")
 setwd(wkpath)
 ```
 And then load the hyperparameter file:
@@ -520,4 +520,48 @@ hyp.params.table
 # write table to file
 write.table(hyp.params.table, file="hyperparameters.dsv", sep="\t", quote=F)
 # ==============================================================================
+```
+Now let's plot the MCMC traces and the posterior distributions of the hyperparameters and save them into a pdf file. Ideally, the MCMC traces should look like a caterpillar and distributions should be generally unimodal, indicating that mixing was good. Also it is highly recommended to run ```GEMMA``` multiple times (at least 3) and compare both the traces and the posterior distributions of the hyperparameters obtained from different runs and check that all are converging into the same values. However, we will not do this in this practical for time reasons.
+
+```R
+# plot traces and distributions of hyperparameters
+# ==============================================================================
+pdf(file="hyperparameters.pdf", width=8.3,height=11.7)
+layout(matrix(c(1,1,2,3,4,4,5,6), 4, 2, byrow = TRUE))
+
+# PVE
+# ------------------------------------------------------------------------------
+plot(hyp.params$pve, type="l", ylab="PVE", main="PVE - trace")
+hist(hyp.params$pve, main="PVE - posterior distribution", xlab="PVE")
+plot(density(hyp.params$pve), main="PVE - posterior distribution", xlab="PVE")
+# ------------------------------------------------------------------------------
+
+# PGE
+# ------------------------------------------------------------------------------
+plot(hyp.params$pge, type="l", ylab="PGE", main="PGE - trace")
+hist(hyp.params$pge, main="PGE - posterior distribution", xlab="PGE")
+plot(density(hyp.params$pge), main="PGE - posterior distribution", xlab="PGE")
+# ------------------------------------------------------------------------------
+
+# pi
+# ------------------------------------------------------------------------------
+plot(hyp.params$pi, type="l", ylab="pi", main="pi")
+hist(hyp.params$pi, main="pi", xlab="pi")
+plot(density(hyp.params$pi), main="pi", xlab="pi")
+# ------------------------------------------------------------------------------
+
+# No gamma
+# ------------------------------------------------------------------------------
+plot(hyp.params$n_gamma, type="l", ylab="n_gamma", main="n_gamma - trace")
+hist(hyp.params$n_gamma, main="n_gamma - posterior distribution", xlab="n_gamma")
+plot(density(hyp.params$pi), main="n_gamma - posterior distribution", xlab="n_gamma")
+# ------------------------------------------------------------------------------
+dev.off()
+# ==============================================================================
+```R
+
+
+Remember to quit the ```R``` session when finished:
+```R
+quit()
 ```

@@ -592,7 +592,7 @@ library(data.table)
 params<-fread("bslmm.param.txt",header=T,sep="\t", data.table=F)
 # ==============================================================================
 ```
-Now we will get the SNPs that have a sparse effect (i.e. detectable large effect) on the phenotype. For each SNP, we multiply the small effect of the variant (*&beta;*; all SNPs have small effects) by the additional large effect (*&gamma;*; only some SNPs have large effects) to get the sparse effect size.
+Now we will get the SNPs that have a sparse effect (i.e. detectable large effect) on the phenotype. In the table, *beta* is actually *&beta;|&gamma;*=1, being *&beta;* the small effect all variants have and *&gamma;* the additional large effect only some variatns have. Thus, the sparse effect size for each SNP is calculated multipling *&beta;* by *&gamma;*.
 ```R
 # Get variants with sparse effect size on phenotypes 
 # ==============================================================================

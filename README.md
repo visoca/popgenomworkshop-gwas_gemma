@@ -1,6 +1,6 @@
 *Population Genomics Workshop 2018, University of Sheffield*
 
-# Genetic architecture of traits using Genome Wide Association (GWA) mapping with GEMMA
+# Genetic architecture of traits using multi-locus Genome Wide Association (GWA) mapping with GEMMA
 #### Victor Soria-Carrasco
 
 The aim of this practical is use a multi-SNP method to study the genetic architecture of colour pattern phenotype (i.e. white stripe) in *Timema cristinae stick* insects. In particular, we will use the Bayesian Sparse Linear Mixed Model (BSLMM) model implemented in the program ```GEMMA```, a piece of software that also allow taking into account any potential population structure. This model is a hybrid approach that allows inferring whether the genetic basis of a trait is highly polygenic or rather determined by a few loci (i.e. oligogenic), as well as identifying the loci that show the strongest association with the trait.  We will use the dataset of [Comeault et al. 2015](http://www.cell.com/current-biology/fulltext/S0960-9822(15)00661-2), which consists of 602 individuals sampled from a phenotypically variable population called FHA. We will infer the proportion of phenotypic variance explained by the genotypes, what fraction of such variance can be explained by a reduced number of major effect loci, and will identify what loci show the most significant association with this trait.
@@ -572,24 +572,28 @@ Ideally, the MCMC traces should look like a caterpillar and distributions should
 
 ![PVE](pve.png)
 
-We are going to study now the parameter estimates to see what SNPs are most strongly associated with the trait. This is the script ```gemma_param.R```.
-```R
-options(echo=TRUE)
+We are going to study now the parameter estimates to see if there are SNPs strongly and consistenly associated with the trait. We are going to use the script ```gemma_param.R```. As before, we are going to use an ```R``` interactive session to go through it step by step.
 
+Let's change to the working directory (this might not be necessary if you are using the same R session than before):
+
+```R
+# change to the working directory
 user<-Sys.getenv("USER")
 wkpath<-paste("/data/",user, "/gwas_gemma/output",sep="")
 setwd(wkpath)
-
-
+```
+We will load a library to speed the loading of large tables to memory and will load the parameter estimates:
+```R
 # library to speed up loading of big tables
 library(data.table)
 
 # Load parameters output
 # ==============================================================================
-params<-read("bslmm.param.txt",header=T,sep="\t", data.table=F)
+params<-fread("bslmm.param.txt",header=T,sep="\t", data.table=F)
 # ==============================================================================
+```
 
-
+```R
 # Get variants with sparse effect size on phenotypes 
 # ==============================================================================
 # add sparse effect size (= beta * gamma) to data frame

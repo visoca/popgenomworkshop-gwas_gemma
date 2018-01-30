@@ -568,7 +568,7 @@ plot(density(hyp.params$pi), main="n_gamma - posterior distribution", xlab="n_ga
 dev.off()
 # ==============================================================================
 ```
-Ideally, the MCMC traces should look like a caterpillar and distributions should be generally unimodal, indicating that mixing was good. Also it is highly recommended to run ```GEMMA``` multiple times (at least 3) and compare both the traces and the posterior distributions of the hyperparameters obtained from different runs and check that all are converging into the same values. However, we will not do this in this practical for time reasons. For instance, PVE should look like this
+Ideally, the MCMC traces should look like a caterpillar and distributions should be generally unimodal, indicating that mixing was good. Also it is highly recommended to run ```GEMMA``` multiple times (at least 3) and compare both the traces and the posterior distributions of the hyperparameters obtained from different runs and check that all are converging into the same values. However, we will not do this in this practical for time reasons. For instance, PVE should look like this:
 
 ![PVE](pve.png)
 
@@ -738,6 +738,8 @@ dev.off()
 # ==============================================================================
 
 ```
+The PIP plot shows there are three SNPs strongly associated with colour pattern in two scaffolds that belong to linkage group 8 .
+![PIP](pip_plot.png)
 
 Remember to quit the ```R``` session when finished:
 ```R

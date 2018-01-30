@@ -603,10 +603,13 @@ Then we get the SNPs that have a detectable large effect size, sort them by effe
 ```R
 # get variants with effect size > 0
 params.effects<-params[params$eff>0,]
+
 # show number of variants with measurable effect
 nrow(params.effects)
+
 # sort by descending effect size
 params.effects.sort<-params.effects[order(-params.effects$eff),]
+
 # show top 10 variants with highest effect
 head(params.effects.sort, 10) 
 
@@ -625,7 +628,22 @@ write.table(top1, file="top1eff.dsv", quote=F, row.names=F, sep="\t")
 write.table(top01, file="top0.1eff.dsv", quote=F, row.names=F, sep="\t")
 write.table(top001, file="top0.01eff.dsv", quote=F, row.names=F, sep="\t")
 ```
+There should be around 15595 SNPs with detectable sparse effects and the top SNPs should look like this (notice we didn't specify chromosome nor positions and therefore there are only SNP ids, i.e. rs):
 
+|chr|rs|ps|n_miss|alpha|beta|gamma|
+|---|---|---|----|---|---|---|
+|-9|lg8_ord45_scaf1036-131573|-9|0|-1.229901e-05|-1.2065980|0.5364|4929|0.64721917|
+|-9|lg8_ord55_scaf1512-149001|-9|0|-6.640361e-05|-0.7905428|0.5635|4943|0.48103043|
+|-9|lg8_ord66_scaf318-448145|-9|0|-1.133074e-04|-0.6136137|0.0566|341474|0.44547087|
+|-9|lgNA_ordNA_scaf784-237602|-9|0|1.004314e-04|0.7119540|0.0378|330495|0.03473054|
+|-9|lg3_ord81_scaf488-29866|-9|0|7.241678e-05|0.9273204|0.0232|315197|0.02691186|
+|-9|lgNA_ordNA_scaf154-274617|-9|0|5.164412e-05|1.1116970|0.0157|5105|0.02151383|
+|-9|lg6_ord32_scaf531-110990|-9|0|6.656697e-05|0.9619961|0.0169|183101|0.01745364|
+|-9|lg6_ord32_scaf531-110990|-9|0|6.656697e-05|0.9619961|0.0169|138641|0.01625773|
+|-9|lg6_ord32_scaf531-110989|-9|0|6.606357e-05|0.9763403|0.0144|138636|0.01405930|
+|-9|lg3_ord28_scaf970-18573|-9|0|5.868428e-05|1.1262150|0.0109|138636|0.01405930|0.01227574|
+
+We are going to estimate the Posterior Inclusion Probability (PIP), that is the frequency a SNP is estimated to have a detectable large effect in the MCMC (i.e. *\&gamma;*). This can be used as a measure of the strength of association of a SNP with a genotype. As with the effect sizes we will sort them by PIP, and save the top SNPs using several thresholds (0.01, 0.1, 0.25, 0.5):
 ```R
 # ==============================================================================
 # Get variants with high Posterior Inclusion Probability (PIP) == gamma
@@ -654,6 +672,25 @@ write.table(pip10, file="pip10.dsv", quote=F, row.names=F, sep="\t")
 write.table(pip25, file="pip25.dsv", quote=F, row.names=F, sep="\t")
 write.table(pip50, file="pip50.dsv", quote=F, row.names=F, sep="\t")
 # ------------------------------------------------------------------------------
+```
+You can see the SNPs are very similar but not exactly the same ones than when sorted by effect size:
+
+|chr|rs|ps|n_miss|alpha|beta|gamma|
+|---|---|---|----|---|---|---|
+|-9|lg8_ord55_scaf1512-149001|-9|0|-6.640361e-05|-0.7905428|0.5635|0.445470868|
+|-9|lg8_ord45_scaf1036-131573|-9|0|-1.229901e-05|-1.2065980|0.5364|0.647219167|
+|-9|lg8_ord45_scaf1036-131605|-9|0|-1.096165e-05|-1.0375980|0.4636|0.481030433|
+|-9|lg8_ord66_scaf318-448145|-9|0|-1.133074e-04|-0.6136137|0.0566|0.034730535|
+|-9|lgNA_ordNA_scaf784-237602|-9|0|1.004314e-04|0.7119540|0.0378|0.026911861|
+|-9|lg1_ord96_scaf190-725578|-9|0|-2.183769e-04|-0.3418733|0.0326|0.011145070|
+|-9|lg3_ord81_scaf488-29866|-9|0|7.241678e-05|0.9273204|0.0232|0.021513833|
+|-9|lg10_ord64_scaf380-30883|-9|0|-2.363161e-04|-0.3245005|0.0180|0.005841009|
+|-9|lg8_ord60_scaf2482-78371|-9|0|1.514078e-04|0.4569336|0.0174|0.007950645|
+|-9|lg6_ord32_scaf531-110990|-9|0|6.656697e-05|0.9619961|0.0169|0.016257734|
+
+
+Lastly we can generate a Manhattan plot of the PIPs to visualize the distribution of associated SNPs across the genome and save it as a png file. We will highlight the top candidates in the genome and visualize the size of the dots reflecting the effect size.
+```R
 # ==============================================================================
 # plot variants PIPs across linkage groups/chromosomes
 # ==============================================================================
@@ -747,7 +784,7 @@ dev.off()
 # ==============================================================================
 
 ```
-The PIP plot shows there are three SNPs strongly associated with colour pattern in two scaffolds that belong to linkage group 8 .
+The PIP plot shows there are three large effect size SNPs strongly associated with colour pattern in two non-contiguous scaffolds that belong to linkage group 8:
 ![PIP](pip_plot.png)
 
 Remember to quit the ```R``` session when finished:

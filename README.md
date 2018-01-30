@@ -129,23 +129,16 @@ You can get some info about how to run the Perl script:
 scripts/bcf2bbgeno.pl -h
 ```
 
-Now let's calculate the genotype posterior probabilites and save them in mean genotype format. This process may take quite a while (over 15 minutes), so you may want to either put it a bash script and submit a batch job to the cluster (see ```bcf2bbgeno.sh```) or skip this step altogether (see below).
-
+To calculate the genotype posterior probabilites and save them in mean genotype format, we would need to run a command like this one (followed by compression to save some space, given that ```gemma``` can handle gzipped files):
 ```bash
-# Execute script
 scripts/bcf2bbgeno.pl -i data/fha.vcf.gz -o fha.bbgeno -p H-W -s -r
-```
-When the script finishes, given that ```gemma``` can handle gzipped files, it is a good idea to compress the output file to save some space:
-```bash
 # compress the file to save some space
 gzip fha.bbgeno
 ```
-
-As stated before, this step may take a while and it may be worth to simply skip it and use the .bbgeno.gz and .bbgeno.ids.txt files from the results folder:
+However, this process may take quite a while (over 1h if the network is slow) and require over the default 2 Gb memory allocated for interactive jobs by default. Therefore it would be better to use submit a batch job to the cluster (see ```bcf2bbgeno.sh```) or, given that it still can take some time, it may be worth to simply skip it altogether and use the .bbgeno.gz and .bbgeno.ids.txt files from the results folder:
 ```bash
 cp results/*.bbgeno.* ./
 ```
-
 In any case, you should have now two new files: fha.bbgeno.gz, which contains the mean genotypes, and fha.bbgeno.ids.txt, which contains the ids of the samples (i.e. individuals) in the same order as shown in the genotypes file. You can have a look at them:
 
 ```bash
@@ -160,6 +153,7 @@ gzip -dc fha.bbgeno.gz | less -S
 
 The first column is the SNP id, second one is major/reference allele and the third one is the minor/alternate allele. Having major and minor or reference and alternate alleles depends on how you called variants. This does not matter for downstream analyses with ```gemma```, but should be born in mind when interpreting the results. The rest of the columns are the mean genotypes for all the individuals (one for each).
 
+The other file is simply to keep track of the order of the individuals in the genotype file:
 ```bash
 less -S fha.ids.txt
 ```

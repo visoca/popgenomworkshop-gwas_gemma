@@ -47,7 +47,7 @@ You probably will want to transfer files to your own computer for visualization 
 # transfer pdf file
 rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output/hyperparameters.pdf ./
 # transfer all results
-rsync -avqqq myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output ./
+rsync -av myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output ./
 ```
 Graphical alternatives are [WinSCP](http://dsavas.staff.shef.ac.uk/software/xconnect/winscp.html) or [Cyberduck](http://www.macupdate.com/app/mac/8392/cyberduck). You can find more detailed information [here](https://www.sheffield.ac.uk/wrgrid/using/access).
 ***

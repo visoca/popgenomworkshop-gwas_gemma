@@ -86,7 +86,7 @@ bcftools view data/fha.vcf.gz | less -S
 # excluding long header
 bcftools view -H data/fha.vcf.gz | less -S
 ```
-There are two files containing the phenotypes of the same inviduals in the same order than in the vcf file (NA when the phenotype is missing). This phenotypes encode the dorsal white stripe either as a continuous trait (standardised white area; ```fha.pheno```) or as a discerte binary trait (presence/absence; ```fha.pheno2```). You can have a look at the files content:
+There are two files containing the phenotypes of the same inviduals in the same order than in the vcf file (NA when the phenotype is missing). This phenotypes encode the dorsal white stripe either as a continuous trait (standardised white stripe area; ```fha.pheno```) or as a discerte binary trait (presence/absence of the stripe; ```fha.pheno2```). You can have a look at the files content:
 ```bash
 head data/fha.pheno
 ```
@@ -267,7 +267,7 @@ less -S output/relmatrix.cXX.txt
 >0.001901346128  0.0004308437331 0.001814713502  0.002068707695  0.05202678922   -8.732093775e-05        0.0021426359<br>
 >0.001199397691  0.004303127573  -0.0001891657497        -7.400802932e-05        -8.732093775e-05        0.1186797893<br>
 
-Now we are going to run ```GEMMA``` to fit a BSLMM model. Since this will take quite some time (~15 minutes), we are going to submit it as batch job to the cluster queue. We will be using the script ```gemma_bslmm.sh```. Let's have a look with nano:
+Now we are going to run ```GEMMA``` to fit a BSLMM model. Since this will take quite some time (~15 minutes), we are going to submit it as batch job to the cluster queue. We will be using the script ```gemma_bslmm.sh```. We will run ```GEMMA``` using the relatedness matrix we estimated before, using the BSLMM model with the continuous phenotypes and excluding variants with a minor allele frequency of lest than 1%. We will run a MCMC chain for 1,000,000 steps, after an initial burn-in of 250,000, saving every 100th step, so that we will end up with 10,000 samples to approximate the posterior distribution of the parameters. Let's have a look with nano:
 ```bash
 nano scripts/gemma_bslmm.sh
 ```
@@ -380,5 +380,96 @@ echo
 echo "----------------------------------------------------------"
 date
 ```
+Let's submit the job to the queue:
+```bash
+qsub scripts/gemma_bslmm.sh
+```
+Run time should be around 15 minutes. You can check if the job has finished with ```Qstat```. When finished, we should have the following files in the output folder:
+```bash
+ls -lh output
+```
+>-rw-r--r-- 1 myuser cs 7.4K Jan 29 13:17 bslmm.bv.txt<br>
+>-rw-r--r-- 1 myuser cs 6.0M Jan 29 13:17 bslmm.gamma.txt<br>
+>-rw-r--r-- 1 m 29 13:17 bslmm.hyp.txt<br>
+>-rw-r--r-- 1 myuser cs 1.3K Jan 29 13:17 bslmm.log.txt<br>
+>-rw-r--r-- 1 myuser cs  25M Jan 29 13:17 bslmm.param.txt<br>
+>-rw-r--r-- 1 myuser cs 5.7M Jan 29 12:55 relmatrix.cXX.txt<br>
+>-rw-r--r-- 1 myuser cs  505 Jan 29 12:55 relmatrix.log.txt<br>
+
+The new files generated are:
+* bslmm.bv.txt -> posterior samples of breeding values (~estimated random
+effects)
+* bslmm.gamma.txt -> posterior samples of gamma (i.e. sparse effects) listing the SNPs included in the model in each iteration, that is the loci with detectable (large) effects
+* bslmm.hyp.txt -> posterior samples of hyperparameters, including the proportion of the variance explained (pve), the proportion of the variance explained by the sparse effect loci (pge), the proportion of SNPs with non-zero effects (pi) and the estimated number of loci with large effects (n_gamma)
+* bslmm.log.txt -> log file
+* bslmm.param.txt -> posterior samples of parameters: random effects (alpha), fixed effects (beta), and sparse effects (gamma)
+
+Let's have a look at the log. Notice the number of individuals with both genotypic and phenotypic data is 546 out of 602 and the number of SNPs was reduced from 518,232 to 346,660 after excluding SNPs missing genotypes for over 5% individuals default threshold) and rare variants (minor allele frequency of less than 1%):
+```bash
+less -S output/bslmm.log.txt
+```
+>##<br>
+>## GEMMA Version = 0.94<br>
+>##<br>
+>## Command Line Input = -g data/fha.bbgeno.gz -p data/fha.pheno -k output/relmatrix.cXX.txt -bslmm 1 -w 250000 -s 1000000 -rpace 100 -wpace 1000 -maf 0.01 -o bslmm <br>
+>##<br>
+>## Summary Statistics:<br>
+>## number of total individuals = 602<br>
+>## number of analyzed individuals = 546<br>
+>## number of covariates = 1<br>
+>## number of phenotypes = 1<br>
+>## number of total SNPs = 518232<br>
+>## number of analyzed SNPs = 346660<br>
+>## REMLE log-likelihood in the null model = -737.564<br>
+>## MLE log-likelihood in the null model = -737.31<br>
+>## pve estimate in the null model = 0.889028<br>
+>## se(pve) in the null model = 0.0499207<br>
+>## vg estimate in the null model = 0<br>
+>## ve estimate in the null model = 0<br>
+>## beta estimate in the null model = <br>
+>## se(beta) = <br>
+>## estimated mean = 1.17936e-16<br>
+>##<br>
+>## MCMC related:<br>
+>## initial value of h = 0.889028<br>
+>## initial value of rho = 0.626463<br>
+>## initial value of pi = 0.000865401<br>
+>## initial value of |gamma| = 300<br>
+>## random seed = 47472<br>
+>## acceptance ratio = 0.122066<br>
+>##<br>
+>## Computation Time:<br>
+>## total computation time = 14.2177 min <br>
+>## computation time break down: <br>
+>##      time on calculating relatedness matrix = 0 min <br>
+>##      time on eigen-decomposition = 0.00716667 min <br>
+>##      time on calculating UtX = 2.52367 min <br>
+>##      time on mcmc = 9.01583 min <br>
+>##      time on Omega = 2.15233 min <br>
+>##<br>
+
+the hyperparameters:
+```bash
+less -S output/bslmm.hyp.txt
+```
+>h        pve     rho     pge     pi      n_gamma<br>
+>5.679255e-01    5.827644e-01    4.814629e-01    5.298608e-01    1.708291e-05    3<br>
+>4.568325e-01    5.845055e-01    3.623301e-01    6.121603e-01    1.639111e-05    5<br>
+>5.652819e-01    6.551080e-01    4.100889e-01    5.755021e-01    1.543192e-05    6<br>
+>6.076860e-01    5.368049e-01    6.785772e-01    5.821440e-01    1.722759e-05    3<br>
+>5.805904e-01    4.711531e-01    8.102496e-01    6.904983e-01    1.388330e-05    3<br>
+
+and the parameters (notice we didn't specify chromosome nor positions and therefore there are only SNP ids, i.e. rs):
+```bash
+less -S output/bslmm.param.txt
+```
+>chr     rs      ps      n_miss  alpha   beta    gamma<br>
+>-9      lg13_ord45_scaf428-94107        -9      0       2.887084e-05    0.000000e+00    0.000000e+00<br>
+>-9      lg13_ord45_scaf428-158069       -9      0       -1.256153e-05   0.000000e+00    0.000000e+00<br>
+>-9      lg13_ord45_scaf428-466300       -9      0       1.338440e-05    0.000000e+00    0.000000e+00<br>
+>-9      lg13_ord45_scaf428-337230       -9      0       1.912454e-05    0.000000e+00    0.000000e+00<br>
+>-9      lg13_ord45_scaf428-351513       -9      0       -5.619149e-05   0.000000e+00    0.000000e+00<br>
 
 ## 4. Analysing ```gemma``` BSLMM output
+
+We will be using a few ```R``` scripts to analyse ```GEMMA``` output and produce some plots.

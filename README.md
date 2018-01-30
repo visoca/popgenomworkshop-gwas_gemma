@@ -40,6 +40,17 @@ cat /usr/local/extras/Genomics/workshops/January2018/.nanorc >> /home/$USER/.nan
 ```
 ***
 
+#### Note on transferring output files to your local computer for visualization
+***
+You probably will want to transfer files to your own computer for visualization (especially the images). In Linux and Mac, you can do that using rsync on the terminal. For example, to transfer one of the png files or all the results that are generated in this practical, the command would be: 
+```bash
+# transfer png file
+rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/fst_hmm/timemaHVAxHVC.fst.png ./
+# transfer all results
+rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/fst_hmm/*.* ./
+```
+Graphical alternatives are [WinSCP](http://dsavas.staff.shef.ac.uk/software/xconnect/winscp.html) or [Cyberduck](http://www.macupdate.com/app/mac/8392/cyberduck). You can find more detailed information [here](https://www.sheffield.ac.uk/wrgrid/using/access).
+***
 Change to your data directory:
 ```bash
 cd /data/$USER/
@@ -466,4 +477,47 @@ less -S output/bslmm.param.txt
 
 ## 4. Analysing ```gemma``` BSLMM output
 
-We will be using a few ```R``` scripts to analyse ```GEMMA``` output and produce some plots.
+We will use two ```R``` scripts to analyse ```GEMMA``` output and produce some plots. These scripts can be run in batch mode like executing: ```Rscript gemma_hyperparam.R```, but you are likely to learn much more if you follow the steps below to run them step by step. Bear in mind the rest of the practical is only R code and will have to run within an R session. Open an R session simply typing the command ```R```.
+
+First, we are going to play with the hyperparameter estimates, which will inform us of the genetic architecture of the trait. This is the script ```gemma_hyperparam.R```.
+
+First we change the working directory:
+```R
+user<-Sys.getenv("USER")
+wkpath<-paste("/data/",user, "/fst_hmm",sep="")
+setwd(wkpath)
+```
+And then load the hyperparameter file:
+```R
+# Load hyperparameter file
+# ==============================================================================
+hyp.params<-read.table("bslmm.hyp.txt",header=T)
+# ==============================================================================
+```
+Let's get some statistics (mean, median, and 95% ETPI):
+```R
+# Get mean, median, and 95% ETPI of hyperparameters
+# ==============================================================================
+# pve -> proportion of phenotypic variance explained by the genotypes
+pve<-c("PVE", mean(hyp.params$pve),quantile(hyp.params$pve, probs=c(0.5,0.025,0.975)))
+
+# pge -> proportion of genetic variance explained by major effect loci
+pge<-c("PGE",mean(hyp.params$pge),quantile(hyp.params$pge, probs=c(0.5,0.025,0.975)))
+
+# pi -> proportion of variants with non-zero effects
+pi<-c("pi",mean(hyp.params$pi),quantile(hyp.params$pi, probs=c(0.5,0.025,0.975)))
+
+# n.gamma -> number of variants with major effect
+n.gamma<-c("n.gamma",mean(hyp.params$n_gamma),quantile(hyp.params$n_gamma, probs=c(0.5,0.025,0.975)))
+# ==============================================================================
+
+# get table of hyperparameters
+# ==============================================================================
+hyp.params.table<-as.data.frame(rbind(h,pve,rho,pge,pi,n.gamma),row.names=F)
+colnames(hyp.params.table)<-c("hyperparam", "mean","median","2.5%", "97.5%")
+# show table
+hyp.params.table
+# write table to file
+write.table(hyp.params.table, file="hyperparameters.dsv", sep="\t", quote=F)
+# ==============================================================================
+```

@@ -415,43 +415,43 @@ Let's have a look at the log. Notice the number of individuals with both genotyp
 less -S output/bslmm.log.txt
 ```
 >##<br>
->## GEMMA Version = 0.94<br>
+>##GEMMA Version = 0.94<br>
 >##<br>
->## Command Line Input = -g data/fha.bbgeno.gz -p data/fha.pheno -k output/relmatrix.cXX.txt -bslmm 1 -w 250000 -s 1000000 -rpace 100 -wpace 1000 -maf 0.01 -o bslmm <br>
+>##Command Line Input = -g data/fha.bbgeno.gz -p data/fha.pheno -k output/relmatrix.cXX.txt -bslmm 1 -w 250000 -s 1000000 -rpace 100 -wpace 1000 -maf 0.01 -o bslmm <br>
 >##<br>
->## Summary Statistics:<br>
->## number of total individuals = 602<br>
->## number of analyzed individuals = 546<br>
->## number of covariates = 1<br>
->## number of phenotypes = 1<br>
->## number of total SNPs = 518232<br>
->## number of analyzed SNPs = 346660<br>
->## REMLE log-likelihood in the null model = -737.564<br>
->## MLE log-likelihood in the null model = -737.31<br>
->## pve estimate in the null model = 0.889028<br>
->## se(pve) in the null model = 0.0499207<br>
->## vg estimate in the null model = 0<br>
->## ve estimate in the null model = 0<br>
->## beta estimate in the null model = <br>
->## se(beta) = <br>
->## estimated mean = 1.17936e-16<br>
+>##Summary Statistics:<br>
+>##number of total individuals = 602<br>
+>##number of analyzed individuals = 546<br>
+>##number of covariates = 1<br>
+>##number of phenotypes = 1<br>
+>##number of total SNPs = 518232<br>
+>##number of analyzed SNPs = 346660<br>
+>##REMLE log-likelihood in the null model = -737.564<br>
+>##MLE log-likelihood in the null model = -737.31<br>
+>##pve estimate in the null model = 0.889028<br>
+>##se(pve) in the null model = 0.0499207<br>
+>##vg estimate in the null model = 0<br>
+>##ve estimate in the null model = 0<br>
+>##beta estimate in the null model = <br>
+>##se(beta) = <br>
+>##estimated mean = 1.17936e-16<br>
 >##<br>
->## MCMC related:<br>
->## initial value of h = 0.889028<br>
->## initial value of rho = 0.626463<br>
->## initial value of pi = 0.000865401<br>
->## initial value of |gamma| = 300<br>
->## random seed = 47472<br>
->## acceptance ratio = 0.122066<br>
+>##MCMC related:<br>
+>##initial value of h = 0.889028<br>
+>##initial value of rho = 0.626463<br>
+>##initial value of pi = 0.000865401<br>
+>##initial value of |gamma| = 300<br>
+>##random seed = 47472<br>
+>##acceptance ratio = 0.122066<br>
 >##<br>
->## Computation Time:<br>
->## total computation time = 14.2177 min <br>
->## computation time break down: <br>
->##      time on calculating relatedness matrix = 0 min <br>
->##      time on eigen-decomposition = 0.00716667 min <br>
->##      time on calculating UtX = 2.52367 min <br>
->##      time on mcmc = 9.01583 min <br>
->##      time on Omega = 2.15233 min <br>
+>##Computation Time:<br>
+>##total computation time = 14.2177 min <br>
+>##computation time break down: <br>
+>##time on calculating relatedness matrix = 0 min <br>
+>##time on eigen-decomposition = 0.00716667 min <br>
+>##time on calculating UtX = 2.52367 min <br>
+>##time on mcmc = 9.01583 min <br>
+>##time on Omega = 2.15233 min <br>
 >##<br>
 
 the hyperparameters:
@@ -522,6 +522,14 @@ hyp.params.table
 write.table(hyp.params.table, file="hyperparameters.dsv", sep="\t", quote=F)
 # ==============================================================================
 ```
+Values should be similar to this:
+
+>  hyperparam              mean       median           2.5%         97.5%<br>
+>1        PVE     0.50758534164   0.49616535   0.3290844075   0.753359795<br>
+>2        PGE     0.70427977221   0.70412075   0.4118065175  0.9789640325<br>
+>3         pi 1.29564889986e-05 9.376132e-06 3.25441665e-06 4.3316011e-05<br>
+>4    n.gamma             4.574            4              1            14<br>
+
 Now let's plot the MCMC traces and the posterior distributions of the hyperparameters and save them into a pdf file.
 ```R
 # plot traces and distributions of hyperparameters

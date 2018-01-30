@@ -7,7 +7,7 @@ The aim of this practical is use a multi-SNP method to study the genetic archite
 
 ![Timema cristinae population](timema.png)
 
-Data and scripts used during this practical will be available in a shared folder in Iceberg, the University of Sheffield HPC cluster, which will allow faster transfers. However, in case attendees would like to use it for practice after the workshop, scripts are also available in [this repository](https://github.com/visoca/popgenomworkshop-gwas_gemma) and data can be downloaded [here](https://drive.google.com/file/d/12m3cHEXGUj9AK2YUJBO8a8VCsdKF7GrM/view?usp=sharing) (and results [here]()).
+Data and scripts used during this practical will be available in a shared folder in Iceberg, the University of Sheffield HPC cluster, which will allow faster transfers. However, in case attendees would like to use it for practice after the workshop, scripts are also available in [this repository](https://github.com/visoca/popgenomworkshop-gwas_gemma) and data can be downloaded [here](https://drive.google.com/file/d/12m3cHEXGUj9AK2YUJBO8a8VCsdKF7GrM/view?usp=sharing) (and results [here](https://drive.google.com/file/d/1jreUd245fVUuLwmgXsg93aRZQLNUSdRl/view?usp=sharing)).
 
 ### Resources
 * [Zhou et al. 2013](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1003264) - Paper where the Bayesian Sparse Linear Mixed Model approach implemented in ```GEMMA``` is described.

@@ -170,7 +170,7 @@ The first column is the SNP id, second one is major/reference allele and the thi
 
 The other file is simply to keep track of the order of the individuals in the genotype file:
 ```bash
-less -S fha.ids.txt
+less -S fha.bbgeno.ids.txt
 ```
 >2013FHA001<br>
 >2013FHA002<br>

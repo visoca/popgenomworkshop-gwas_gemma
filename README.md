@@ -49,6 +49,10 @@ rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output/hyperparamet
 # transfer all results
 rsync -av myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output ./
 ```
+Another possibility is to email you the files, for example:
+```bash
+echo "Text body" | mail -s "Subject: gemma - hyperparameter plot" -a /data/myuser/gwas_gemma/output/hyperparameters.pdf your@email
+```
 Graphical alternatives are [WinSCP](http://dsavas.staff.shef.ac.uk/software/xconnect/winscp.html) or [Cyberduck](http://www.macupdate.com/app/mac/8392/cyberduck). You can find more detailed information [here](https://www.sheffield.ac.uk/wrgrid/using/access).
 ***
 Change to your data directory:

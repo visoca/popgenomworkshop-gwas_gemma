@@ -89,8 +89,6 @@ You should have the following input files:
 ls -lh data
 ```
 >total 1.2G<br>
->-rw-r--r-- 1 myuser cs 347M Jan 28 18:41 fha.bbgeno.gz<br>
->-rw-r--r-- 1 myuser cs 6.5K Jan 28 18:40 fha.bbgeno.ids.txt<br>
 >-rw-r--r-- 1 myuser cs 9.9K Jan 28 18:40 fha.pheno<br>
 >-rw-r--r-- 1 myuser cs 1.3K Jan 28 18:40 fha.pheno2<br>
 >-rw-r--r-- 1 myuser cs 876M Jan 28 18:41 fha.vcf.gz<br>

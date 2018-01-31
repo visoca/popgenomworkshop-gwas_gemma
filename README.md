@@ -11,7 +11,7 @@ Data and scripts used during this practical will be available in a shared folder
 
 ### Resources
 * [Zhou et al. 2013](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1003264) - Paper where the Bayesian Sparse Linear Mixed Model approach implemented in ```GEMMA``` is described.
-* [Zhou Lab website](http://www.xzlab.org/software.html) - You can obtain GEMMA and a few other interesting programs for GWAS here.
+* [Zhou Lab website](http://www.xzlab.org/software.html) - You can obtain ```GEMMA``` and a few other interesting programs for GWAS here.
 * [GEMMA manual](http://www.xzlab.org/software/GEMMAmanual.pdf)
 
 ## 1. Initial set up

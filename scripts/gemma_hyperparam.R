@@ -64,7 +64,7 @@ plot(density(hyp.params$pi), main="pi", xlab="pi")
 # ------------------------------------------------------------------------------
 plot(hyp.params$n_gamma, type="l", ylab="n_gamma", main="n_gamma - trace")
 hist(hyp.params$n_gamma, main="n_gamma - posterior distribution", xlab="n_gamma")
-plot(density(hyp.params$pi), main="n_gamma - posterior distribution", xlab="n_gamma")
+plot(density(hyp.params$n_gamma), main="n_gamma - posterior distribution", xlab="n_gamma")
 # ------------------------------------------------------------------------------
 dev.off()
 # ==============================================================================

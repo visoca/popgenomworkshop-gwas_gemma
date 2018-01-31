@@ -101,7 +101,7 @@ bcftools view data/fha.vcf.gz | less -S
 # excluding long header
 bcftools view -H data/fha.vcf.gz | less -S
 ```
-There are two files containing the phenotypes of the same inviduals in the same order than in the vcf file (NA when the phenotype is missing). This phenotypes encode the dorsal white stripe either as a continuous trait (standardised white stripe area; ```fha.pheno```) or as a discerte binary trait (presence/absence of the stripe; ```fha.pheno2```). You can have a look at the files content:
+There are two files containing the phenotypes of the same inviduals in the same order than in the vcf file (NA when the phenotype is missing). This phenotypes encode the dorsal white stripe either as a continuous trait (standardised white stripe area; ```fha.pheno```) or as a discerte binary trait (presence/absence of the stripe; ```fha.pheno2```). We will be using the first one for this practical (but it would be a good exercise to repeat analyses using the other one with the probit model using ```-bslmm 3```). You can have a look at the files content:
 ```bash
 head data/fha.pheno
 ```

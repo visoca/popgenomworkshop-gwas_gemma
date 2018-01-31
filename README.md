@@ -49,7 +49,7 @@ rsync myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output/hyperparamet
 # transfer all results
 rsync -av myuser@iceberg.sheffield.ac.uk:/data/myuser/gwas_gemma/output ./
 ```
-Another possibility is to email you the files, for example:
+Another possibility is to email the files, for example:
 ```bash
 echo "Text body" | mail -s "Subject: gemma - hyperparameter plot" -a /data/myuser/gwas_gemma/output/hyperparameters.pdf your@email
 ```

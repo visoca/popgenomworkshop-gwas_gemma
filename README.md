@@ -689,7 +689,7 @@ You can see the SNPs are very similar but not exactly the same ones than when so
 |-9|lg6_ord32_scaf531-110990|-9|0|6.656697e-05|0.9619961|0.0169|0.016257734|
 
 
-Lastly we can generate a Manhattan plot of the PIPs to visualize the distribution of associated SNPs across the genome and save it as a png file. We will highlight the top candidates in the genome and visualize the size of the dots reflecting the effect size.
+Lastly we can generate a Manhattan plot of the PIPs to visualize the distribution of associated SNPs across the genome and save it as a png file. We will highlight the top candidates in the genome and make the size of the dots reflect the effect size.
 ```R
 # ==============================================================================
 # plot variants PIPs across linkage groups/chromosomes

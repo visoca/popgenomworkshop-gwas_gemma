@@ -1,10 +1,10 @@
 #!/usr/bin/env perl
 
 # (c) Victor Soria-Carrasco
-# Last modified: 03/03/2016 17:40:13
+# Last modified: 31/01/2018 01:01:15
 
 # Description:
-# This script estimate genotype probabilities and 
+# This script estimates genotype probabilities and 
 # converts a vcf/bcf file to BIMBAM mean genotype format 
 # (i.e. alternate allele dosage)
 # 
@@ -18,7 +18,7 @@ use Getopt::Long;
 use File::Basename;
 use File::Path qw(make_path);
 
-my $version='1.3-2016.03.03';
+my $version='1.3-2018.01.31';
 
 # Changelog
 # 03/03/2016

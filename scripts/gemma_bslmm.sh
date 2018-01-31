@@ -7,7 +7,7 @@
 GEMMA='gemma'
 
 DIR="/data/$USER/gwas_gemma"
-GENOTYPES='data/fha.bbgeno.gz'
+GENOTYPES='fha.bbgeno.gz'
 PHENOTYPES='data/fha.pheno'
 RELMATRIX='output/relmatrix.cXX.txt'
 BSLMM=1 # 1=BSLMM, 2=standard ridge regression/GBLUP (no mcmc), 3=probit BSLMM (requires 0/1 phenotypes)

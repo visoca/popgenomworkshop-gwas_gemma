@@ -647,7 +647,7 @@ There should be around 15595 SNPs with detectable sparse effects and the top SNP
 |-9|lg6_ord32_scaf531-110989|-9|0|6.606357e-05|0.9763403|0.0144|138636|0.01405930|
 |-9|lg3_ord28_scaf970-18573|-9|0|5.868428e-05|1.1262150|0.0109|138636|0.01405930|0.01227574|
 
-We are going to estimate the Posterior Inclusion Probability (PIP), that is the frequency a SNP is estimated to have a detectable large effect in the MCMC (i.e. *&gamma;*). This can be used as a measure of the strength of association of a SNP with a genotype. As with the effect sizes we will sort them by PIP, and save the top SNPs using several thresholds (0.01, 0.1, 0.25, 0.5):
+We are going to estimate the Posterior Inclusion Probability (PIP), that is the frequency a SNP is estimated to have a detectable large effect in the MCMC (i.e. *&gamma;*). This can be used as a measure of the strength of association of a SNP with a phenotype. As with the effect sizes we will sort them by PIP, and save the top SNPs using several thresholds (0.01, 0.1, 0.25, 0.5):
 ```R
 # ==============================================================================
 # Get variants with high Posterior Inclusion Probability (PIP) == gamma

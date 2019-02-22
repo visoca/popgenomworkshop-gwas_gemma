@@ -1,4 +1,4 @@
-*Population Genomics Workshop 2018, University of Sheffield*
+*Population Genomics Workshop 2019, University of Sheffield*
 
 # Genetic architecture of traits using multi-locus Genome Wide Association (GWA) mapping with GEMMA
 #### Victor Soria-Carrasco
@@ -36,7 +36,7 @@ If you don't get that message, follow the instructions [here](http://soria-carra
 
 In addition, if you want to configure the ```nano``` text editor to have syntax highlighting and line numbering, you can configure it this way:
 ```bash
-cat /usr/local/extras/Genomics/workshops/January2018/.nanorc >> /home/$USER/.nanorc
+cat /usr/local/extras/Genomics/workshops/January2019/.nanorc >> /home/$USER/.nanorc
 ```
 ***
 
@@ -67,15 +67,15 @@ mkdir gwas_gemma
 ```
 Copy scripts:
 ```bash
-cp -r /usr/local/extras/Genomics/workshops/January2018/gwas_gemma/scripts ./gwas_gemma
+cp -r /usr/local/extras/Genomics/workshops/January2019/gwas_gemma/scripts ./gwas_gemma
 ```
 Copy data:
 ```bash
-cp -r /usr/local/extras/Genomics/workshops/January2018/gwas_gemma/data ./gwas_gemma/
+cp -r /usr/local/extras/Genomics/workshops/January2019/gwas_gemma/data ./gwas_gemma/
 ```
 To check you are getting the expected results, you can also copy a directory containing all the files that should be produced after running this practical:
 ```bash
-cp -r /usr/local/extras/Genomics/workshops/January2018/gwas_gemma/results ./gwas_gemma/
+cp -r /usr/local/extras/Genomics/workshops/January2019/gwas_gemma/results ./gwas_gemma/
 ```
 Change to the working directory we are going to use for this practical:
 ```bash
